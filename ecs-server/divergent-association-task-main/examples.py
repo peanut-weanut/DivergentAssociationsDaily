@@ -1,4 +1,6 @@
 import dat
+from flask import Flask, request, jsonify
+import numpy as np
 
 # GloVe model from https://nlp.stanford.edu/projects/glove/
 model = dat.Model("glove.840B.300d.txt", "words.txt")
@@ -14,22 +16,29 @@ print(model.distance("cat", "thimble")) # 0.8787
 print(model.dat(["cat", "dog"], 2)) # 19.83
 print(model.dat(["cat", "thimble"], 2)) # 87.87
 
-# Word examples (Figure 1 in paper)
-low = ["arm", "eyes", "feet", "hand", "head", "leg", "body"]
-average = ["bag", "bee", "burger", "feast", "office", "shoes", "tree"]
-high = ["hippo", "jumper", "machinery", "prickle", "tickets", "tomato", "violin"]
+app = Flask(__name__)
 
-# Compute the DAT score (transformed average cosine distance of first 7 valid words)
-print(model.dat(low)) # 50
-print(model.dat(average)) # 78
-print(model.dat(high)) # 95
-
-status = True
+@app.route('/test', methods=['POST'])
+def handleListOfWords():
+    data = request.json
+    #if 'data' in data and isinstance(data['data'], list):
+    wordList = data['data']
+    score = model.dat(wordList)
+    response_data = {
+        'score': str(score)[:5]
+    }
+    return jsonify(response_data), 200
+'''
+status = False
 while status:
     curWordList = []
     for x in range(10):
         curWordList.append(input("\ntype in word nr : " + str(x+1) + "\n"))
     print("\nyour score is: " + str(model.dat(curWordList)))
+    print("\n here is how each word related to eachother")
+    for word in curWordList:
+        for x in range(len(curWordList)):
+            print(word + " & " + curWordList[x] + ": " + str(model.dat([word, curWordList[x]], 2)))
     proceed = ""
     while proceed != "y" and proceed != "n":
         proceed = input("do you want to continue?\ny/n\n")
@@ -37,3 +46,4 @@ while status:
             status = False
         if proceed == "y":
             status = True
+'''
