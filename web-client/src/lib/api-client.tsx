@@ -1,4 +1,6 @@
-const API_URL = 'http://localhost:5000';
+const jIP = 'http://172.30.176.1:5000'
+const lh = 'http://localhost:5000'
+const API_URL = jIP;
 
 interface APIRequestConfig{
     method: 'GET' | 'POST';
