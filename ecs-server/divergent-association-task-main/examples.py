@@ -1,9 +1,10 @@
 import dat
 from flask import Flask, request, jsonify
 import numpy as np
+from flask_cors import CORS
 
 # GloVe model from https://nlp.stanford.edu/projects/glove/
-model = dat.Model("glove.840B.300d.txt", "words.txt")
+model = dat.Model("glove.6B.50d.txt", "words.txt")
 
 # Compound words are translated into words found in the model
 print(model.validate("cul de sac")) # cul-de-sac
@@ -17,13 +18,41 @@ print(model.dat(["cat", "dog"], 2)) # 19.83
 print(model.dat(["cat", "thimble"], 2)) # 87.87
 
 app = Flask(__name__)
+CORS(app, resources={
+    r"/*": {  # Match all routes
+        "origins": ["http://localhost:3000"],
+        "methods": ["GET", "POST", "OPTIONS"],
+        "allow_headers": ["Content-Type"],
+        "supports_credentials": False
+    }
+})
+@app.route('/', methods=['OPTIONS'])
+def handle_options():
+    response = make_response()
+    response.headers.add('Access-Control-Allow-Origin', 'http://localhost:3000')
+    response.headers.add('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+    response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
+    return response
 
 @app.route('/test', methods=['POST'])
 def handleListOfWords():
-    data = request.json
+    if request.method == 'OPTIONS':
+        response = make_response()
+        response.headers.add('Access-Control-Allow-Origin', 'http://localhost:3000')
+        response.headers.add('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
+        return response
+    
+    print('test')
+    print('Received data: ', request.json)
+    print('test')
+    data = request.get_json()
+    print('test')
+    print('Received data: ', data)
     #if 'data' in data and isinstance(data['data'], list):
-    wordList = data['data']
+    wordList = data
     score = model.dat(wordList)
+    print(score)
     response_data = {
         'score': str(score)[:5]
     }

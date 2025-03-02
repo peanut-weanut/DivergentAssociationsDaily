@@ -1,32 +1,40 @@
-const API_URL = 'http://localhost:5000/api';
+const API_URL = 'http://localhost:5000/test';
 
 interface APIRequestConfig{
-    endpoint : string;
-    method?: 'GET' | 'POST';
-    data?: any;
+    method: 'GET' | 'POST';
+    data?: string[];
 }
 
-async function apiRequest({ endpoint, method = 'GET', data } : APIRequestConfig){
-    const response = await fetch(`${API_URL}${endpoint}`, {
+async function apiRequest({ method = 'POST', data } : APIRequestConfig){
+    const fetchOptions : RequestInit = {
         method,
-        headers : {
-            'Content-Type' : 'application/json',
+        headers: {
+            'Content-Type' : 'application/json'
         },
-        ...(data && { body : JSON.stringify(data)}),
-    });
-
-    if(!response.ok){
-        throw new Error(`API call failed: ${response.statusText}`);
+        mode : 'cors',
+        credentials : 'omit',
     }
+    if (data){
+        fetchOptions.body = JSON.stringify(data);
+    }
+    console.log(fetchOptions)
+    try{
+        const response = await fetch(`${API_URL}`, fetchOptions);
 
-    return response.text();
+        if (!response.ok){
+            throw new Error(`API call failed: ${response.statusText}`);
+        }
+        return response.text();
+    } catch(error){
+        console.error('API Request failed: ', error);
+        throw error;
+    }
 }
 
 export const baseAPICall = {
     sendTestData : (strings : string[]) =>
         apiRequest({
-            endpoint : '/test',
             method : 'POST',
             data : strings,
         }),
-};
+    }

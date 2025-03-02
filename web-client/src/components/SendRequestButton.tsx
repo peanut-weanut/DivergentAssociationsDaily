@@ -9,8 +9,10 @@ const SendRequestButton = () => {
         setStatus('loading');
 
         try {
-            const testData = ["hello", "john", "just", "farted", "now", "stinky", "not", "good","dying", "immediately"]
+            
+            const testData : string[] = ["hello", "john", "just", "farted", "now", "stinky", "not", "good","dying", "immediately"]
             const result = await baseAPICall.sendTestData(testData);
+            console.log(testData)
             setResponse(result);
             setStatus('success');
         } catch (error){
