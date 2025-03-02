@@ -18,3 +18,6 @@ words.txt:
 
 .PHONY: run
 .PHONY: install
+
+devserver:
+	flask --app examples --debug run

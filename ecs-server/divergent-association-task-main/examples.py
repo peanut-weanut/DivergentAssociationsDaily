@@ -1,6 +1,10 @@
 import dat
 from flask import Flask, request, jsonify
-import numpy as np
+import numpy as np #incase I figure out how to send shorts via json instead of the string im sending now
+
+#to run a debug version of this python backend, type
+#flask --app examples --debug run
+#in the terminal
 from flask_cors import CORS
 
 # GloVe model from https://nlp.stanford.edu/projects/glove/
@@ -50,9 +54,7 @@ def handleListOfWords():
     print('test')
     print('Received data: ', data)
     #if 'data' in data and isinstance(data['data'], list):
-    wordList = data
-    score = model.dat(wordList)
-    print(score)
+    score = model.dat(data['data'])
     response_data = {
         'score': str(score)[:5]
     }
