@@ -27,7 +27,7 @@ fromscratch:
 	make runserver
 
 devserver:
-	flask --app examples --debug run
+	flask --app DAG_backend --debug run
 
 runserver:
-	gunicorn -w 4 -b 0.0.0.0:5000 examples:app
+	gunicorn -w 4 -b 0.0.0.0:5000 DAG_backend:app
