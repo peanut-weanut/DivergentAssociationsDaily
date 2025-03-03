@@ -21,3 +21,6 @@ words.txt:
 
 devserver:
 	flask --app examples --debug run
+
+runserver:
+	gunicorn -w 4 -b 0.0.0.0:5000 examples:app
