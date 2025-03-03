@@ -48,22 +48,3 @@ def handleListOfWords():
         'score': str(score)[:5]
     }
     return jsonify(response_data), 200
-'''
-status = False
-while status:
-    curWordList = []
-    for x in range(10):
-        curWordList.append(input("\ntype in word nr : " + str(x+1) + "\n"))
-    print("\nyour score is: " + str(model.dat(curWordList)))
-    print("\n here is how each word related to eachother")
-    for word in curWordList:
-        for x in range(len(curWordList)):
-            print(word + " & " + curWordList[x] + ": " + str(model.dat([word, curWordList[x]], 2)))
-    proceed = ""
-    while proceed != "y" and proceed != "n":
-        proceed = input("do you want to continue?\ny/n\n")
-        if proceed == "n":
-            status = False
-        if proceed == "y":
-            status = True
-'''
