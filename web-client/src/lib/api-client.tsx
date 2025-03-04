@@ -1,4 +1,3 @@
-const jIP = 'http://172.30.176.1:5000'
 const lh = 'http://localhost:5000'
 const render = 'https://divergentassociationsdaily.onrender.com'
 const API_URL = render;

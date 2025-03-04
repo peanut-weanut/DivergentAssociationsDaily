@@ -1,10 +1,5 @@
 
 from flask import Flask, request, jsonify, make_response
-import numpy as np #incase I figure out how to send shorts via json instead of the string im sending now
-
-#to run a debug version of this python backend, type
-#flask --app examples --debug run
-#in the terminal
 from flask_cors import CORS
 
 app = Flask(__name__)
