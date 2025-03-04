@@ -10,7 +10,7 @@ glove.840B.300d.txt:
 		unzip glove.840B.300d.zip
 
 glove.6B.txt:
-	wget https://nlp.stanford.edu/data/glove.twitter.27B.zip && \
+	wget https://nlp.stanford.edu/data/glove.6B.zip && \
 		unzip glove.twitter.27B.zip
 
 words.txt:
