@@ -9,7 +9,7 @@ glove.840B.300d.txt:
 	wget https://nlp.stanford.edu/data/glove.840B.300d.zip && \
 		unzip glove.840B.300d.zip
 
-glove.twitter.27B.txt:
+glove.6B.txt:
 	wget https://nlp.stanford.edu/data/glove.twitter.27B.zip && \
 		unzip glove.twitter.27B.zip
 
@@ -30,7 +30,7 @@ runserver:
 	gunicorn -w 4 -b 0.0.0.0:5000 DAG_backend:app
 
 rendertest:
-	glove.twitter.27B.txt
+	glove.6B.txt
 	runserver
 
 fromscratch:
