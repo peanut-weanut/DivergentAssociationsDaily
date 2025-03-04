@@ -11,7 +11,7 @@ glove.840B.300d.txt:
 
 glove.6B.txt:
 	wget https://nlp.stanford.edu/data/glove.6B.zip && \
-		unzip glove.twitter.27B.zip
+		unzip glove.6B.zip
 
 words.txt:
 	# Requires unmunch from hunspell-tools and language files (.dic and .aff) from
