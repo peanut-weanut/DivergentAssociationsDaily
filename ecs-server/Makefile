@@ -29,9 +29,7 @@ devserver:
 runserver:
 	gunicorn -w 4 -b 0.0.0.0:5000 DAG_backend:app
 
-rendertest:
-	glove.6B.txt
-	runserver
+rendertest: glove.6B.txt runserver
 
 fromscratch:
 	make install
