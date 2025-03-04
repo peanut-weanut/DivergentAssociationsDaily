@@ -9,7 +9,7 @@ from flask_cors import CORS
 
 # GloVe model from https://nlp.stanford.edu/projects/glove/
 #model = dat.Model("glove.840B.300d.txt", "words.txt")
-model = dat.Model("glove.6B.txt", "words.txt")
+model = dat.Model("glove.6B.300d.txt", "words.txt")
 
 app = Flask(__name__)
 CORS(app, resources={
