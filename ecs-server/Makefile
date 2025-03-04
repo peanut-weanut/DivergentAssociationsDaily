@@ -9,6 +9,10 @@ glove.840B.300d.txt:
 	wget https://nlp.stanford.edu/data/glove.840B.300d.zip && \
 		unzip glove.840B.300d.zip
 
+glove.twitter.27B.txt:
+	wget https://nlp.stanford.edu/data/glove.twitter.27B.zip && \
+		unzip glove.twitter.27B.zip
+
 words.txt:
 	# Requires unmunch from hunspell-tools and language files (.dic and .aff) from
 	# https://cgit.freedesktop.org/libreoffice/dictionaries/tree/en
@@ -19,15 +23,16 @@ words.txt:
 .PHONY: run
 .PHONY: install
 
-rendertest:
-	gunicorn -w 4 -b 0.0.0.0:5000 rendertest:app
-
-fromscratch:
-	make install
-	make runserver
-
 devserver:
 	flask --app DAG_backend --debug run
 
 runserver:
 	gunicorn -w 4 -b 0.0.0.0:5000 DAG_backend:app
+
+rendertest:
+	glove.twitter.27B.txt
+	runserver
+
+fromscratch:
+	make install
+	make runserver
