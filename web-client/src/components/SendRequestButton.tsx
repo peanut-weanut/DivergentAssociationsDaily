@@ -1,7 +1,10 @@
 import { useState } from "react";
 import { baseAPICall } from '@/lib/api-client'
 
-const SendRequestButton = () => {
+interface RequestProps {
+  words : string[]
+}
+const SendRequestButton : React.FC<RequestProps> = ({ words }) => {
     const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
     const [response, setResponse] = useState<string>('');
 
@@ -9,17 +12,14 @@ const SendRequestButton = () => {
         setStatus('loading');
 
         try {
-            
-            const testData : string[] = ["hello", "john", "just", "farted", "now", "stinky", "not", "good","dying", "immediately"]
-            const result = await baseAPICall.sendTestData(testData);
-            console.log(testData)
+            const result = await baseAPICall.sendTestData(words);
+            //console.log(testData)
             setResponse(result);
             setStatus('success');
         } catch (error){
             console.error(`ERROR: ${error}`);
             setStatus('error');
         }
-
         setTimeout(() => setStatus('idle'), 2000);
     }
     

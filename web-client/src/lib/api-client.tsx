@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:5000/test';
+const API_URL = 'https://divergentassociationsdaily.onrender.com/';
 
 interface APIRequestConfig{
     method: 'GET' | 'POST';

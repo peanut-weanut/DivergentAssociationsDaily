@@ -1,17 +1,16 @@
-import { useState } from 'react';
+import React, { ChangeEvent } from 'react';
 
-const TextField = () => {
-  const [value, setValue] = useState('');
+interface TextFieldProps {
+  value: string;
+  onChange: (event: ChangeEvent<HTMLInputElement>) => void;
+}
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(event.target.value);
-  };
-
+const TextField: React.FC<TextFieldProps> = ({ value, onChange }) => {
   return (
     <input
       type="text"
       value={value}
-      onChange={handleChange}
+      onChange={onChange}
       placeholder="Enter text..."
       className="h-6 bg-gray-100"
     />

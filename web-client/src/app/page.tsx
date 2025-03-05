@@ -1,22 +1,33 @@
 'use client';
 
-import { useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import TextField from '@/components/TextField';
 import FadeInDiv from '@/components/FadeInDiv';
 import UpwardStack from '@/components/UpwardStack';
 import Modal from '@/components/Modal';
 import SendRequestButton from '@/components/SendRequestButton';
+import { text } from 'stream/consumers';
 
 export default function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [fieldValues, setFieldValues] = useState<string[]>(Array(10).fill(''));
 
+  const handleFieldChange = (index: number) => (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newFieldValues = [...fieldValues];
+    newFieldValues[index] = event.target.value;
+    setFieldValues(newFieldValues);
+  };
+
+  const textFields = fieldValues.map((value, index) => (
+    <TextField key={index} value={value} onChange={handleFieldChange(index)} />
+  ));
   return (
     <main className="min-h-screen relative">
       {/* First section with text field and modal button */}
       <FadeInDiv delay={0}>
         <div className="max-w-md mx-auto p-4 space-y-4">
-          <h1 className="text-2xl font-bold">Interactive Components Demo</h1>
-          <TextField />
+          <h1 className="text-2xl font-bold">Divergent Associations Daily v0.1.1</h1>
+          {textFields}
           <div className="space-x-4">
             <button 
               onClick={() => setIsModalOpen(true)}
@@ -25,7 +36,7 @@ export default function Home() {
               Open Modal
             </button>
             <FadeInDiv delay={600}>
-              <SendRequestButton />
+              <SendRequestButton words = {fieldValues}/>
             </FadeInDiv>
           </div>
           
