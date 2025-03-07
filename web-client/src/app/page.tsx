@@ -1,64 +1,27 @@
 'use client';
 
-import { ChangeEvent, useState } from 'react';
-import TextField from '@/components/TextField';
-import FadeInDiv from '@/components/FadeInDiv';
-import UpwardStack from '@/components/UpwardStack';
-import Modal from '@/components/Modal';
-import SendRequestButton from '@/components/SendRequestButton';
-import { text } from 'stream/consumers';
+import MainLayout from '@/components/MainLayout';
 
 export default function Home() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [fieldValues, setFieldValues] = useState<string[]>(Array(10).fill(''));
-
-  const handleFieldChange = (index: number) => (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newFieldValues = [...fieldValues];
-    newFieldValues[index] = event.target.value;
-    setFieldValues(newFieldValues);
-  };
-
-  const textFields = fieldValues.map((value, index) => (
-    <TextField key={index} value={value} onChange={handleFieldChange(index)} />
-  ));
   return (
-    <main className="min-h-screen relative">
-      {/* First section with text field and modal button */}
-      <FadeInDiv delay={0}>
-        <div className="max-w-md mx-auto p-4 space-y-4">
-          <h1 className="text-2xl font-bold">Divergent Associations Daily v0.1.1</h1>
-          {textFields}
-          <div className="space-x-4">
-            <button 
-              onClick={() => setIsModalOpen(true)}
-              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-            >
-              Open Modal
-            </button>
-            <FadeInDiv delay={600}>
-              <SendRequestButton words = {fieldValues}/>
-            </FadeInDiv>
-          </div>
-          
+    <main className="bg-black min-h-screen flex items-center justify-center py-6">
+      {/* Mobile frame for small screens */}
+      <div className="md:hidden relative mx-auto my-4 w-[320px] h-[640px] bg-black rounded-[40px] shadow-xl overflow-hidden border-8 border-black">
+        {/* Phone speaker */}
+        <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-16 h-5 bg-black rounded-b-xl z-10 flex items-center justify-center">
+          <div className="w-2 h-2 rounded-full bg-gray-800"></div>
         </div>
-      </FadeInDiv>
-
-      {/* Upward stack section */}
-      <FadeInDiv delay={400}>
-        <div className="h-[500px] max-w-md mx-auto">
-          <UpwardStack />
+        
+        {/* App content */}
+        <div className="bg-white h-full w-full overflow-y-auto">
+          <MainLayout />
         </div>
-      </FadeInDiv>
+      </div>
       
-      {/* Modal */}
-      <Modal 
-        isOpen={isModalOpen} 
-        onClose={() => setIsModalOpen(false)}
-      >
-        <h2 className="text-xl font-bold mb-4">Welcome!</h2>
-        <p>This is our modal component with some sample content.</p>
-        <p className="mt-4">You can close it using the X button or clicking outside.</p>
-      </Modal>
+      {/* No frame for desktop view */}
+      <div className="hidden md:block w-full h-full">
+        <MainLayout />
+      </div>
     </main>
   );
 }

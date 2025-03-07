@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { baseAPICall } from '@/lib/api-client'
+import { sendWords } from '@/lib/api-client'
 
 interface RequestProps {
   words : string[]
@@ -12,7 +12,7 @@ const SendRequestButton : React.FC<RequestProps> = ({ words }) => {
         setStatus('loading');
 
         try {
-            const result = await baseAPICall.sendTestData(words);
+            const result = await sendWords.sendData(words);
             //console.log(testData)
             setResponse(result);
             setStatus('success');

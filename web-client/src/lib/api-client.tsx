@@ -31,10 +31,17 @@ async function apiRequest({ method = 'POST', data } : APIRequestConfig){
     }
 }
 
-export const baseAPICall = {
-    sendTestData : (strings : string[]) =>
+export const sendWords = {
+    sendData : (strings : string[]) =>
         apiRequest({
             method : 'POST',
             data : strings,
         }),
     }
+export const getDailyWords = {
+    getData : () =>
+        apiRequest({
+            method : 'GET',
+            data : [],
+        })
+}
