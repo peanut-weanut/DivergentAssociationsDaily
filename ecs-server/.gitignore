@@ -6,6 +6,8 @@ glove.6B.100d.txt
 glove.6B.50d.txt
 glove.6B.zip
 
+test.py
+
 profile_results.txt
 backend/
 __pycache__
