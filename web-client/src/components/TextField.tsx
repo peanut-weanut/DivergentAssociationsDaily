@@ -1,18 +1,25 @@
-import React, { ChangeEvent } from 'react';
+import React from 'react';
 
 interface TextFieldProps {
   value: string;
-  onChange: (event: ChangeEvent<HTMLInputElement>) => void;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  placeholder?: string;
+  className?: string;
 }
 
-const TextField: React.FC<TextFieldProps> = ({ value, onChange }) => {
+const TextField = ({
+  value,
+  onChange,
+  placeholder = "Enter text...",
+  className = "w-full border border-gray-300 rounded-md py-2 px-3 font-mono"
+}: TextFieldProps) => {
   return (
     <input
       type="text"
       value={value}
       onChange={onChange}
-      placeholder="Enter text..."
-      className="h-6 bg-gray-100"
+      placeholder={placeholder}
+      className={className}
     />
   );
 };
