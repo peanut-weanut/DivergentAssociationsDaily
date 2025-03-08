@@ -50,6 +50,7 @@ const GameContent = ({ todaysWords, isMobile = false }: GameContentProps) => {
       {/* Submit button */}
       <SendRequestButton 
         words={[...todaysWords, ...userInputs.filter(word => word.trim() !== '')]} 
+        originalWords={todaysWords}
         isMobile={isMobile} 
       />
     </div>
