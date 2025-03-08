@@ -49,7 +49,8 @@ const MainLayout = () => {
   // Check viewport width on mount and resize
   useEffect(() => {
     const checkViewport = () => {
-      setIsDesktop(window.innerWidth >= 768);
+      // Use aspect ratio: if width > height, it's desktop
+      setIsDesktop(window.innerWidth > window.innerHeight);
     };
     
     // Initial check
@@ -102,16 +103,9 @@ const MainLayout = () => {
         </div>
         
         {/* Content overlays */}
-        <div className="h-full relative flex items-center justify-between mx-auto" style={{ maxWidth: "1200px" }}>
-          {/* Left area - containing the menu */}
-          <div className="w-1/3 flex justify-center z-10">
-            <div className="bg-white border border-gray-300">
-              <SideMenu />
-            </div>
-          </div>
-          
-          {/* Center game column (fixed width) */}
-          <div className="w-[528px] h-full bg-white border-l border-r border-gray-300 z-20">
+        <div className="h-full relative mx-auto" style={{ maxWidth: "1200px" }}>
+          {/* Game content column (fixed width, centered) */}
+          <div className="absolute left-1/2 transform -translate-x-1/2 w-[528px] h-full bg-white border-l border-r border-gray-300 z-20">
             <div className="px-4 py-4 h-full overflow-y-auto">
               {isLoading ? (
                 <div className="flex items-center justify-center h-full">
@@ -123,8 +117,12 @@ const MainLayout = () => {
             </div>
           </div>
           
-          {/* Right area - empty space for balance */}
-          <div className="w-1/3"></div>
+          {/* Side menu (positioned relative to container) */}
+          <div className="absolute left-1/6 transform -translate-x-1/2 top-1/2 -translate-y-1/2 z-10">
+            <div className="bg-white border border-gray-300">
+              <SideMenu />
+            </div>
+          </div>
         </div>
       </div>
     </div>
