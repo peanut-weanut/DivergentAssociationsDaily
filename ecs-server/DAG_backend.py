@@ -11,7 +11,7 @@ from flask_cors import CORS
 
 # GloVe model from https://nlp.stanford.edu/projects/glove/
 #model = dat.Model("glove.840B.300d.txt", "words.txt")
-model = dat.Model("glove.840B.300d.txt", "words.txt")
+model = dat.Model("glove.300B.300d.txt", "words.txt")
 
 app = Flask(__name__)
 
