@@ -1,3 +1,7 @@
+words.txt
+nouns.txt
+CSW.txt
+
 glove.840B.300d.txt
 glove.840B.300d.zip
 glove.6B.300d.txt
@@ -5,6 +9,8 @@ glove.6B.200d.txt
 glove.6B.100d.txt
 glove.6B.50d.txt
 glove.6B.zip
+
+test.py
 
 profile_results.txt
 backend/

@@ -15,11 +15,11 @@ class Model:
         """Join model and words matching pattern in dictionary"""
 
         # Keep unique words matching pattern from file
-        words = set()
+        self.words = set()
         with open(dictionary, "r", encoding="utf8") as f:
             for line in f:
                 if re.match(pattern, line):
-                    words.add(line.rstrip("\n"))
+                    self.words.add(line.rstrip("\n"))
 
         # Join words with model
         vectors = {}
@@ -27,11 +27,13 @@ class Model:
             for line in f:
                 tokens = line.split(" ")
                 word = tokens[0]
-                if word in words:
+                if word in self.words:
                     vector = numpy.asarray(tokens[1:], "float32")
                     vectors[word] = vector
         self.vectors = vectors
-
+    
+    def returnWords(self):
+        return self.words
 
     def validate(self, word):
         """Clean up word and find best candidate to use"""
