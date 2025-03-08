@@ -30,10 +30,12 @@ const MainLayout = () => {
     const fetchDailyWords = async () => {
       try {
         setIsLoading(true);
+        // The response is now already a JavaScript array, no need to parse
         const response = await getDailyWords.getData();
-        // Assuming response is a JSON string containing an array of words
-        const parsedWords = JSON.parse(response);
-        setDailyWords(Array.isArray(parsedWords) ? parsedWords : []);
+        // Check if response is an array, if not provide fallback
+        console.log(response)
+        const words = JSON.parse(response).data
+        setDailyWords(Array.isArray(words) ? words : ["WORDS", "NOT", "FOUND"]);
       } catch (error) {
         console.error("Failed to fetch daily words:", error);
         // Fallback words if API fails

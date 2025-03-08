@@ -1,46 +1,27 @@
-import React, { useState, useEffect } from 'react';
-import { getDailyWords } from '@/lib/api-client';
+import React from 'react';
 
 interface WordsDisplayProps {
   title?: string;
-  words?: string[];
+  words: string[];
+  isLoading?: boolean;
   onWordsLoaded?: (words: string[]) => void;
 }
 
 const WordsDisplay = ({ 
   title = "Today's words are:", 
-  words: initialWords,
+  words,
+  isLoading = false,
   onWordsLoaded
 }: WordsDisplayProps) => {
-  const [words, setWords] = useState<string[]>(initialWords || []);
-  const [loading, setLoading] = useState(!initialWords);
-
-  useEffect(() => {
-    if (!initialWords) {
-      const fetchDailyWords = async () => {
-        try {
-          setLoading(true);
-          const response = await getDailyWords.getData();
-          // Assuming response is a JSON string containing an array of words
-          const parsedWords = JSON.parse(response);
-          setWords(Array.isArray(parsedWords) ? parsedWords : []);
-          
-          if (onWordsLoaded && Array.isArray(parsedWords)) {
-            onWordsLoaded(parsedWords);
-          }
-        } catch (error) {
-          console.error("Failed to fetch daily words:", error);
-          setWords(["Error", "loading", "words"]);
-        } finally {
-          setLoading(false);
-        }
-      };
-
-      fetchDailyWords();
+  
+  // Call onWordsLoaded callback if provided and we have words
+  React.useEffect(() => {
+    if (onWordsLoaded && words.length > 0) {
+      onWordsLoaded(words);
     }
-  }, [initialWords, onWordsLoaded]);
+  }, [words, onWordsLoaded]);
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="border border-black p-4 mx-auto mb-4 w-full max-w-md text-center">
         <div className="text-xl mb-2">{title}</div>

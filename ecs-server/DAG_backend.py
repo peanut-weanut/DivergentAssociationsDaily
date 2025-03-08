@@ -60,11 +60,15 @@ def returnThreeDailyWords():
     todayswords = []
     with open("Word Word Word List.csv", 'r', newline = '') as file:
         datereader = reader(file)
+        today = date.today()
+        today_str = f"{today.month}/{today.day}/{today.year}"
+
         for line in datereader:
-            if line[0] == date.today().strftime('%-m/%-d/%Y'):
+            if line[0] == today_str:
                 todayswords.append(line[1])
                 todayswords.append(line[2])
                 todayswords.append(line[3])
+        print(todayswords);
     response = {
         "data" : todayswords,
         "title" : app.config['TOGGLE_TITLE']
