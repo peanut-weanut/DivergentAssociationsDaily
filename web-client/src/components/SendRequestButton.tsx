@@ -1,54 +1,60 @@
 import { useState } from "react";
-import { sendWords } from '@/lib/api-client'
+import { sendWords } from '@/lib/api-client';
 
 interface RequestProps {
-  words : string[]
+  words: string[];
+  isMobile?: boolean;
 }
-const SendRequestButton : React.FC<RequestProps> = ({ words }) => {
-    const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
-    const [response, setResponse] = useState<string>('');
 
-    const handleClick = async () => {
-        setStatus('loading');
+const SendRequestButton: React.FC<RequestProps> = ({ words, isMobile = false }) => {
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [response, setResponse] = useState<string>('');
 
-        try {
-            const result = await sendWords.sendData(words);
-            //console.log(testData)
-            setResponse(result);
-            setStatus('success');
-        } catch (error){
-            console.error(`ERROR: ${error}`);
-            setStatus('error');
-        }
-        setTimeout(() => setStatus('idle'), 2000);
+  const handleSubmit = async () => {
+    setStatus('loading');
+    
+    try {
+      const result = await sendWords.sendData(words);
+      setResponse(result);
+      setStatus('success');
+    } catch (error) {
+      console.error(`ERROR: ${error}`);
+      setStatus('error');
     }
     
-    return (
-        <div className="space-y-2">
+    setTimeout(() => setStatus('idle'), 2000);
+  };
+
+  return (
+    <>
+      {/* Submit button - absolute positioning for mobile */}
+      <div className={`w-full flex items-center ${isMobile ? "fixed bottom-2 left-0 px-4 max-w-sm mx-auto right-0" : ""}`}>
+        <button
+          onClick={handleSubmit}
+          disabled={status === 'loading'}
+          className="flex-1 border border-black py-3 text-xl font-mono uppercase hover:bg-black hover:text-white transition-colors duration-200"
+        >
+          Submit
+        </button>
+        
+        {isMobile && (
           <button
-            onClick={handleClick}
-            disabled={status === 'loading'}
-            className={`
-              px-4 py-2 rounded transition-colors
-              ${status === 'idle' ? 'bg-blue-500 hover:bg-blue-600 text-white' : ''}
-              ${status === 'loading' ? 'bg-gray-400 text-white cursor-not-allowed' : ''}
-              ${status === 'success' ? 'bg-green-500 text-white' : ''}
-              ${status === 'error' ? 'bg-red-500 text-white' : ''}
-            `}
+            onClick={() => window.openHelpModal?.()}
+            className="ml-2 w-12 h-12 rounded-full border border-black flex items-center justify-center text-2xl"
           >
-            {status === 'idle' && 'Send Test Packet'}
-            {status === 'loading' && 'Sending...'}
-            {status === 'success' && 'Sent!'}
-            {status === 'error' && 'Error!'}
+            ?
           </button>
-    
-          {response && (
-            <div className="text-sm">
-              Response: {response}
-            </div>
-          )}
+        )}
+      </div>
+      
+      {/* Response message */}
+      {response && (
+        <div className="w-full mt-2 text-sm font-mono">
+          Response: {response}
         </div>
-    );
+      )}
+    </>
+  );
 };
 
 export default SendRequestButton;

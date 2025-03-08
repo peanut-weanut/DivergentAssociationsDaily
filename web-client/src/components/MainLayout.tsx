@@ -5,6 +5,7 @@ import DesktopHeader from '@/components/DesktopHeader';
 import MobileHeader from '@/components/MobileHeader';
 import SideMenu from '@/components/SideMenu';
 import AnimationPlaceholder from '@/components/AnimatedBackground';
+import { getDailyWords } from '@/lib/api-client';
 
 // Extend the global Window interface to include our modal opener function
 declare global {
@@ -14,14 +15,36 @@ declare global {
 }
 
 const MainLayout = () => {
-  // Today's words
-  const todaysWords = ["SOLVENT", "PREHISTORY", "CRACKERJACK"];
+  // Daily words state
+  const [dailyWords, setDailyWords] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   
   // Modal state
   const [isModalOpen, setIsModalOpen] = useState(false);
   
   // Viewport width for responsive layout
   const [isDesktop, setIsDesktop] = useState(false);
+  
+  // Fetch daily words on mount
+  useEffect(() => {
+    const fetchDailyWords = async () => {
+      try {
+        setIsLoading(true);
+        const response = await getDailyWords.getData();
+        // Assuming response is a JSON string containing an array of words
+        const parsedWords = JSON.parse(response);
+        setDailyWords(Array.isArray(parsedWords) ? parsedWords : []);
+      } catch (error) {
+        console.error("Failed to fetch daily words:", error);
+        // Fallback words if API fails
+        setDailyWords(["ERROR", "LOADING", "WORDS"]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchDailyWords();
+  }, []);
   
   // Check viewport width on mount and resize
   useEffect(() => {
@@ -50,7 +73,13 @@ const MainLayout = () => {
     <div className="w-full h-full flex flex-col bg-white">
       <MobileHeader />
       <div className="px-4 flex-1 pb-2 overflow-y-auto">
-        <GameContent todaysWords={todaysWords} isMobile={true} />
+        {isLoading ? (
+          <div className="flex items-center justify-center h-full">
+            <div className="text-center">Loading words...</div>
+          </div>
+        ) : (
+          <GameContent todaysWords={dailyWords} isMobile={true} />
+        )}
       </div>
     </div>
   );
@@ -59,33 +88,43 @@ const MainLayout = () => {
   const DesktopLayout = () => (
     <div className="flex flex-col h-screen w-full">
       {/* Header */}
-      <DesktopHeader />
+      <div className="bg-white border-b border-gray-300">
+        <DesktopHeader />
+      </div>
       
       {/* Main content area */}
       <div className="flex-1 relative">
         {/* Background animation (positioned absolutely behind everything) */}
-        <div className="absolute inset-0 bg-black">
-          <div className="h-full w-full flex items-center justify-center">
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="w-4/5 h-4/5 border-2 border-gray-600 z-0 bg-white">
             <AnimationPlaceholder />
           </div>
         </div>
         
-        {/* Content columns as overlays */}
-        <div className="flex h-full relative">
-          {/* Left menu column (20%) */}
-          <div className="w-1/5 bg-white border-r border-gray-300 overflow-y-auto">
-            <SideMenu />
-          </div>
-          
-          {/* Middle space (60%) - transparent for animation */}
-          <div className="w-3/5"></div>
-          
-          {/* Right game column (20%) */}
-          <div className="w-1/5 bg-white border-l border-gray-300 overflow-y-auto">
-            <div className="px-4 py-4">
-              <GameContent todaysWords={todaysWords} />
+        {/* Content overlays */}
+        <div className="h-full relative flex items-center justify-between mx-auto" style={{ maxWidth: "1200px" }}>
+          {/* Left area - containing the menu */}
+          <div className="w-1/3 flex justify-center z-10">
+            <div className="bg-white border border-gray-300">
+              <SideMenu />
             </div>
           </div>
+          
+          {/* Center game column (fixed width) */}
+          <div className="w-[528px] h-full bg-white border-l border-r border-gray-300 z-20">
+            <div className="px-4 py-4 h-full overflow-y-auto">
+              {isLoading ? (
+                <div className="flex items-center justify-center h-full">
+                  <div className="text-center">Loading words...</div>
+                </div>
+              ) : (
+                <GameContent todaysWords={dailyWords} />
+              )}
+            </div>
+          </div>
+          
+          {/* Right area - empty space for balance */}
+          <div className="w-1/3"></div>
         </div>
       </div>
     </div>

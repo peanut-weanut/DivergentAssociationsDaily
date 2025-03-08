@@ -3,6 +3,7 @@ const API_URL = 'https://divergentassociationsdaily.onrender.com/';
 interface APIRequestConfig{
     method: 'GET' | 'POST';
     data?: string[];
+    title?: string;
 }
 
 async function apiRequest({ method = 'POST', data } : APIRequestConfig){
@@ -42,6 +43,5 @@ export const getDailyWords = {
     getData : () =>
         apiRequest({
             method : 'GET',
-            data : [],
         })
 }
