@@ -28,7 +28,7 @@ const SendRequestButton: React.FC<RequestProps> = ({ words, isMobile = false }) 
   return (
     <>
       {/* Submit button - absolute positioning for mobile */}
-      <div className={`w-full flex items-center ${isMobile ? "fixed bottom-2 left-0 px-4 max-w-sm mx-auto right-0" : ""}`}>
+      <div className={`w-full flex items-center "fixed bottom-2 left-0 px-4 max-w-sm mx-auto right-0"`}>
         <button
           onClick={handleSubmit}
           disabled={status === 'loading'}
