@@ -14,7 +14,7 @@ const SendRequestButton: React.FC<RequestProps> = ({
   isMobile = false 
 }) => {
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
-  const [scoreData, setScoreData] = useState<{ score: number } | null>(null);
+  const [scoreData, setScoreData] = useState<number | null>(null);
   const [userWords, setUserWords] = useState<string[]>([]);
 
   const handleSubmit = async () => {
@@ -39,11 +39,12 @@ const SendRequestButton: React.FC<RequestProps> = ({
         parsedResult = JSON.parse(result);
       } catch (e) {
         // Fallback if not valid JSON
-        parsedResult = { score: parseInt(result) || 0 };
+        parsedResult = { score : parseInt(result)|| 0 };
       }
-      
-      setScoreData(parsedResult.score);
-      setUserWords(parsedResult.words);
+      parsedResult.score *= 0.01;
+      setScoreData(parsedResult.score); 
+      console.log(`${scoreData}`);
+      setUserWords(parsedResult.data);
       
       setStatus('success');
     } catch (error) {
@@ -87,7 +88,7 @@ const SendRequestButton: React.FC<RequestProps> = ({
       {/* Score screen - only rendered when we have score data */}
       {scoreData && (
         <ScoreScreen 
-          score={scoreData.score} 
+          score={scoreData} 
           words={originalWords}
           userWords={userWords}
           autoScroll={true}

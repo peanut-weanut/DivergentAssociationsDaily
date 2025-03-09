@@ -1,31 +1,45 @@
-import React from 'react';
+import { useState } from "react";
+import { finalSubmit } from '@/lib/api-client';
+import ScoreScreen from './ScoreScreen';
 
-interface LoadingOverlayProps {
-  isVisible: boolean;
-  message?: string;
+interface RequestProps {
+  words: string[];
+  isMobile?: boolean;
+  originalWords: string[]; // Added to track original daily words
 }
 
-const LoadingOverlay: React.FC<LoadingOverlayProps> = ({ 
-  isVisible,
-  message = "Calculating your word associations..." 
+const SendRequestButton: React.FC<RequestProps> = ({ 
+  words, 
+  originalWords, 
+  isMobile = false 
 }) => {
-  if (!isVisible) return null;
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [scoreData, setScoreData] = useState<{ score: number } | null>(null);
+  const [userWords, setUserWords] = useState<string[]>([]);
 
   return (
-    <div className="fixed inset-0 bg-white bg-opacity-80 z-50 flex flex-col items-center justify-center">
-      {/* Loading animation */}
-      <div className="flex space-x-2 mb-4">
-        <div className="w-3 h-3 bg-black rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
-        <div className="w-3 h-3 bg-black rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
-        <div className="w-3 h-3 bg-black rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
-      </div>
+    <>
+      {/* Loading overlay */}
+      {status === 'loading' && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-8 rounded-lg">
+            <div className="text-xl mb-4">Calculating your score...</div>
+            <div className="w-12 h-12 border-4 border-gray-300 border-t-black rounded-full animate-spin mx-auto"></div>
+          </div>
+        </div>
+      )}
       
-      {/* Loading message */}
-      <div className="text-lg font-mono text-center max-w-xs">
-        {message}
-      </div>
-    </div>
+      {/* Score screen - only rendered when we have score data */}
+      {scoreData && (
+        <ScoreScreen 
+          score={scoreData.score} 
+          words={originalWords}
+          userWords={userWords}
+          autoScroll={true}
+        />
+      )}
+    </>
   );
 };
 
-export default LoadingOverlay;
+export default SendRequestButton;

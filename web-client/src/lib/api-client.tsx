@@ -7,7 +7,7 @@ interface APIRequestConfig{
     type : boolean;
 }
 
-async function apiRequest({ method = 'POST', data } : APIRequestConfig){
+async function apiRequest({ method = 'POST', data , type } : APIRequestConfig){
     const fetchOptions : RequestInit = {
         method,
         headers: {
@@ -17,7 +17,7 @@ async function apiRequest({ method = 'POST', data } : APIRequestConfig){
         credentials : 'omit',
     }
     if (data){
-        fetchOptions.body = JSON.stringify(data);
+        fetchOptions.body = JSON.stringify({data, type});
     }
     console.log(fetchOptions)
     try{

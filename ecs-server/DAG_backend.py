@@ -11,7 +11,7 @@ import heapq #for the most unique pairs
 from flask_cors import CORS
 
 # GloVe model from https://nlp.stanford.edu/projects/glove/
-model = dat.Model("glove.840B.300d.txt", "words.txt")
+model = dat.Model("glove.6b.50d.txt", "words.txt")
 
 #needed functions, modularized so they can be ran on unit tests
 
@@ -66,16 +66,18 @@ def handlePost():
         handle_options()
     
     data = request.get_json()
+    print(data)
     #if 'data' in data and isinstance(data['data'], list):
     score = model.dat(data['data'])
+    print(int(float(str(score*100)[:5])))
     if data['type'] == 0:
         response_data = {
-            'score': str(score)[:5]
+            'score': int(float(str(score*100)[:5]))
         }
     if data['type'] == 1:
-        pairs = resultScreen(data)
+        pairs = resultScreen(data.get('data'))
         response_data = {
-            'score': str(score)[:5],
+            'score': int(float(str(score*100)[:5])),
             'data': pairs
         }
     return jsonify(response_data), 200
