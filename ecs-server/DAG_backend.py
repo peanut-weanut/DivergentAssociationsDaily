@@ -61,7 +61,6 @@ def handle_options():
     return response
 
 @app.route('/', methods=['POST'])
-@app.route('/', methods=['POST'])
 def handlePost():
     if request.method == 'OPTIONS':
         handle_options()
