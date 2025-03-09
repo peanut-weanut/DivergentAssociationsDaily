@@ -25,7 +25,10 @@ const SendRequestButton: React.FC<RequestProps> = ({
     if (userInputWords.filter(w => w.trim()).length === 0) {
       return;
     }
-    
+    // Early return if there are duplicates
+    if(new Set(words).size !== words.length){
+      return; //TODO: change to like, an error message on the hud
+    }
     setUserWords(userInputWords);
     setStatus('loading');
     
