@@ -23,6 +23,12 @@ words.txt:
 .PHONY: run
 .PHONY: install
 
+makenouns:
+	python3 createNounsList.py
+
+makelist:
+	python3 createDatesForCsv.py
+
 devserver:
 	flask --app DAG_backend --debug run
 
