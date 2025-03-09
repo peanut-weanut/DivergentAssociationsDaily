@@ -10,7 +10,7 @@ interface ScoreScreenProps {
 
 const ScoreScreen: React.FC<ScoreScreenProps> = ({ 
   score, 
-  maxScore = 100, 
+  maxScore = 200, 
   words, 
   userWords,
   autoScroll = true 
@@ -37,7 +37,7 @@ const ScoreScreen: React.FC<ScoreScreenProps> = ({
   }, [autoScroll]);
   
   // Calculate percentage for visual representation
-  const scorePercentage = Math.min(100, Math.max(0, (score / maxScore) * 100));
+  const fullScore = Math.min(maxScore, score);
   
   return (
     <div 
@@ -69,7 +69,7 @@ const ScoreScreen: React.FC<ScoreScreenProps> = ({
             fill="none" 
             stroke="black" 
             strokeWidth="8"
-            strokeDasharray={`${2 * Math.PI * 45 * scorePercentage / 100} ${2 * Math.PI * 45 * (1 - scorePercentage / 100)}`}
+            strokeDasharray={`${2 * Math.PI * 45 * fullScore / 100} ${2 * Math.PI * 45 * (1 - fullScore / 100)}`}
             strokeDashoffset="0"
             transform="rotate(-90 50 50)"
           />
@@ -78,11 +78,10 @@ const ScoreScreen: React.FC<ScoreScreenProps> = ({
       
       {/* Word pairings */}
       <div className="w-full max-w-md border border-black p-6 mb-8">
-        <h3 className="text-xl font-mono uppercase mb-4 text-center">Most Unique Pairs</h3>
+        <h3 className="text-xl font-mono uppercase mb-4 text-center">Most Unique Words</h3>
         <div className="space-y-4">
-          {words.map((word, index) => (
+          {words.map((userWords, index) => (
             <div key={index} className="flex justify-between items-center">
-              <div className="text-xl uppercase font-mono">{word}</div>
               <div className="text-xl">→</div>
               <div className="text-xl uppercase font-mono">{userWords[index] || "—"}</div>
             </div>

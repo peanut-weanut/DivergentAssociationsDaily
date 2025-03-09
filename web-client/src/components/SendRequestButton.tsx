@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { sendWords } from '@/lib/api-client';
+import { finalSubmit } from '@/lib/api-client';
 import ScoreScreen from './ScoreScreen';
 
 interface RequestProps {
@@ -30,7 +30,7 @@ const SendRequestButton: React.FC<RequestProps> = ({
     setStatus('loading');
     
     try {
-      const result = await sendWords.sendData(words);
+      const result = await finalSubmit.sendData(words);
       
       // Parse the response - assuming it returns a score
       // Adjust this based on your actual API response format
@@ -42,7 +42,9 @@ const SendRequestButton: React.FC<RequestProps> = ({
         parsedResult = { score: parseInt(result) || 0 };
       }
       
-      setScoreData(parsedResult);
+      setScoreData(parsedResult.score);
+      setUserWords(parsedResult.words);
+      
       setStatus('success');
     } catch (error) {
       console.error(`ERROR: ${error}`);

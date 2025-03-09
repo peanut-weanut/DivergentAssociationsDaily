@@ -4,6 +4,7 @@ interface APIRequestConfig{
     method: 'GET' | 'POST';
     data?: string[];
     title?: string;
+    type : boolean;
 }
 
 async function apiRequest({ method = 'POST', data } : APIRequestConfig){
@@ -37,11 +38,21 @@ export const sendWords = {
         apiRequest({
             method : 'POST',
             data : strings,
+            type : false,
         }),
     }
 export const getDailyWords = {
     getData : () =>
         apiRequest({
             method : 'GET',
+            type : false,
+        })
+    }
+export const finalSubmit = {
+    sendData : (strings : string[]) =>
+        apiRequest({
+            method : 'POST',
+            data : strings,
+            type : true,
         })
 }
