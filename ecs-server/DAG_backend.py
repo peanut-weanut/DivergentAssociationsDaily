@@ -67,13 +67,13 @@ def handlePost():
     
     data = request.get_json()
     #if 'data' in data and isinstance(data['data'], list):
-    score = model.dat(data['data'])
-    if data['type'] == 0:
+    score = model.dat(data.get('data'))
+    if data.get('type') == 0:
         response_data = {
             'score': str(score)[:5]
         }
-    if data['type'] == 1:
-        pairs = resultScreen(data)
+    if data.get('type') == 1:
+        pairs = resultScreen(data.get('data'))
         response_data = {
             'score': str(score)[:5],
             'data': pairs
