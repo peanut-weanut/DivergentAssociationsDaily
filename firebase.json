@@ -13,7 +13,7 @@
     }
   ],
   "hosting": {
-    "public": "web-client/.next/out",
+    "public": "web-client/out",
     "ignore": [
       "firebase.json",
       "**/.*",
