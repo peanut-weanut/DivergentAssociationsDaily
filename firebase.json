@@ -12,12 +12,23 @@
       ]
     }
   ],
+
   "hosting": {
-    "public": "web-client/build",
+    "public": "web-client/.next",
     "ignore": [
       "firebase.json",
       "**/.*",
       "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "/_next/**",
+        "destination": "/_next/**"
+      },
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
     ]
   }
 }
