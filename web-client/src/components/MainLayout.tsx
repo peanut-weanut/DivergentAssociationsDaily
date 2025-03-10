@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Modal from '@/components/Modal';
 import GameContent from '@/components/GameContent';
 import DesktopHeader from '@/components/DesktopHeader';
@@ -19,23 +19,38 @@ const MainLayout = () => {
   const [dailyWords, setDailyWords] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   
+  // Title state based on API response
+  const [showAltTitle, setShowAltTitle] = useState(false);
+  
   // Modal state
   const [isModalOpen, setIsModalOpen] = useState(false);
   
   // Viewport width for responsive layout
   const [isDesktop, setIsDesktop] = useState(false);
   
-  // Fetch daily words on mount
+  // Use ref to prevent duplicate fetch
+  const fetchedRef = useRef(false);
+  
+  // Fetch daily words once on mount
   useEffect(() => {
     const fetchDailyWords = async () => {
+      // Skip if already fetched
+      if (fetchedRef.current) return;
+      
       try {
         setIsLoading(true);
-        // The response is now already a JavaScript array, no need to parse
+        // Mark as fetched to prevent duplicate requests
+        fetchedRef.current = true;
+        
         const response = await getDailyWords.getData();
-        // Check if response is an array, if not provide fallback
-        console.log(response)
-        const words = JSON.parse(response).data
+        const parsedResponse = JSON.parse(response);
+        
+        // Check for words array
+        const words = parsedResponse.data;
         setDailyWords(Array.isArray(words) ? words : ["WORDS", "NOT", "FOUND"]);
+        
+        // Set the title flag based on API response
+        setShowAltTitle(parsedResponse.title);
       } catch (error) {
         console.error("Failed to fetch daily words:", error);
         // Fallback words if API fails
@@ -71,10 +86,23 @@ const MainLayout = () => {
     };
   }, []);
 
+  // Get the current title based on the API response flag
+  const getTitle = () => {
+    return showAltTitle ? (
+      <span className="font-black">WORD<span className="font-normal">WORD</span>WORD</span>
+    ) : (
+      <span>Divergent Associations Daily</span>
+    );
+  };
+
   // Mobile layout
   const MobileLayout = () => (
     <div className="w-full h-full flex flex-col bg-white">
-      <MobileHeader />
+      <div className="text-center py-3 mt-2">
+        <div className="text-2xl">
+          {getTitle()}
+        </div>
+      </div>
       <div className="px-4 flex-1 pb-2 overflow-y-auto">
         {isLoading ? (
           <div className="flex items-center justify-center h-full">
@@ -92,7 +120,13 @@ const MainLayout = () => {
     <div className="flex flex-col h-screen w-full">
       {/* Header */}
       <div className="bg-white border-b border-gray-300">
-        <DesktopHeader />
+        <div className="flex items-center py-3 px-4 mx-auto">
+          <div className="w-1/4 text-xl font-bold font-mono text-left">FOOL</div>
+          <div className="w-1/2 text-2xl text-center">
+            {getTitle()}
+          </div>
+          <div className="w-1/4 font-mono text-right">more games</div>
+        </div>
       </div>
       
       {/* Main content area */}
