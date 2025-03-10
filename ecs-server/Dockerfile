@@ -1,35 +1,28 @@
-FROM python:3.9-slim
+FROM python:3.10-slim
 
-# Set working directory for the backend
 WORKDIR /app
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    git \
-    curl \
-    && rm -rf /var/lib/apt/lists/*
+# Install git and basic dependencies
+RUN apt-get update && \
+    apt-get install -y git build-essential && \
+    rm -rf /var/lib/apt/lists/*
 
 # Clone the repository
 RUN git clone https://github.com/peanut-weanut/DivergentAssociationsDaily.git /app/repo
 
-# Set working directory to the backend directory
+# Set up the working directory
 WORKDIR /app/repo/ecs-server
 
-# Install Python dependencies
-RUN pip install --no-cache-dir flask flask-cors numpy gunicorn
+# Install Python dependencies 
+RUN pip install flask flask-cors numpy scipy gunicorn
 
-# Make sure our application is accessible outside the container
+# Set environment variables
 ENV HOST=0.0.0.0
 ENV PORT=8080
 
-# Expose the port the app runs on
+# Expose the port
 EXPOSE 8080
 
-# Create a simple startup script
-RUN echo '#!/bin/bash\n\
-echo "Starting Flask application..."\n\
-exec gunicorn --bind 0.0.0.0:$PORT --workers 1 --threads 8 --timeout 0 DAG_backend:app\n'\
-> /app/startup.sh && chmod +x /app/startup.sh
+COPY startup.sh startup.sh
 
-# Run the startup script
-CMD ["/app/startup.sh"]
+CMD ["bash","startup.sh"]
