@@ -37,18 +37,12 @@ def getTodaysWords(today_str):
 
 app = Flask(__name__)
 app.config['TOGGLE_TITLE'] = True
-
+allowed_origins = ["http://localhost:3000", "https://divergent-associations.web.app", "https://its.fool.baby/golden-braid"]
 # Get port from environment variable or use 8080 as default
 port = int(os.environ.get('PORT', 8080))
-allowed_origins = ["https://divergent-associations.web.app", "https://its.fool.baby/golden-braid"]
-# Updated CORS configuration to allow requests from your frontend domain
 CORS(app, resources={
-    r"/*": {
-        "origins": [
-            "http://localhost:3000",
-            "https://divergent-associations.web.app",  # Replace with your Firebase app URL
-            "https://its.fool.baby/golden-braid"      # If you have a custom domain
-        ],
+    r"/*": {  # Match all routes
+        "origins": allowed_origins,
         "methods": ["GET", "POST", "OPTIONS"],
         "allow_headers": ["Content-Type"],
         "supports_credentials": False
