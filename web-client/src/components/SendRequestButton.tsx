@@ -43,6 +43,7 @@ const SendRequestButton: React.FC<RequestProps> = ({
       } catch (e) {
         // Fallback if not valid JSON
         parsedResult = { score : parseInt(result)|| 0 };
+        console.assert(e);
       }
       parsedResult.score *= 0.01;
       setScoreData(parsedResult.score); 

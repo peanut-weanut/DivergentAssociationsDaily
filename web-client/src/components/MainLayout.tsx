@@ -1,8 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import Modal from '@/components/Modal';
 import GameContent from '@/components/GameContent';
-import DesktopHeader from '@/components/DesktopHeader';
-import MobileHeader from '@/components/MobileHeader';
 import SideMenu from '@/components/SideMenu';
 import AnimationPlaceholder from '@/components/AnimatedBackground';
 import { getDailyWords } from '@/lib/api-client';
