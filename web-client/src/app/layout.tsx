@@ -20,7 +20,7 @@ const ibmPlexMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "WordWordWord",
+  title: "Divergent Associations",
   description: "A word association game",
 };
 

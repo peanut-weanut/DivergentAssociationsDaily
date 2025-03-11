@@ -117,7 +117,7 @@ const MainLayout = () => {
   const DesktopLayout = () => (
     <div className="flex flex-col h-screen w-full">
       {/* Header */}
-      <div className="bg-white border-b border-gray-300">
+      <div className="bg-white border-b border-black">
         <div className="flex items-center py-3 px-4 mx-auto">
           <div className="w-1/4 text-xl font-bold font-mono text-left">FOOL</div>
           <div className="w-1/2 text-2xl text-center">
@@ -131,7 +131,7 @@ const MainLayout = () => {
       <div className="flex-1 relative">
         {/* Background animation (positioned absolutely behind everything) */}
         <div className="absolute inset-0 flex items-center justify-center">
-          <div className="w-4/5 h-4/5 border-2 border-gray-600 z-0 bg-white">
+          <div className="w-4/5 h-4/5 border-2 border-black z-0 bg-white">
             <AnimationPlaceholder />
           </div>
         </div>
@@ -139,7 +139,7 @@ const MainLayout = () => {
         {/* Content overlays */}
         <div className="h-full relative mx-auto" style={{ maxWidth: "1200px" }}>
           {/* Game content column (fixed width, centered) */}
-          <div className="absolute left-1/2 transform -translate-x-1/2 w-[528px] h-full bg-white border-l border-r border-gray-300 z-20">
+          <div className="absolute left-1/2 transform -translate-x-1/2 w-[528px] h-full bg-white border-l border-r border-black z-20">
             <div className="px-4 py-4 h-full overflow-y-auto">
               {isLoading ? (
                 <div className="flex items-center justify-center h-full">
@@ -153,7 +153,7 @@ const MainLayout = () => {
           
           {/* Side menu (positioned relative to container) */}
           <div className="absolute left-1/6 transform -translate-x-1/1 top-1/2 -translate-y-1/2 z-10">
-            <div className="bg-white border border-gray-300">
+            <div className="bg-white border border-black">
               <SideMenu />
             </div>
           </div>
@@ -172,7 +172,7 @@ const MainLayout = () => {
         onClose={() => setIsModalOpen(false)}
       >
       <h2 className="text-center text-xl font-medium mb-1">Game info</h2>
-      <hr className="border-t border-gray-800 mb-4" />
+      <hr className="border-t border-black mb-4" />
       
       <p className="mb-4">
         Please enter 5 words that are as <strong>different</strong> from each other and 

@@ -1,15 +1,16 @@
-FROM ubuntu:latest
-WORKDIR /usr/local/app
-RUN apt-get -y update
-RUN apt-get install -y git
-RUN apt-get install -y curl
-RUN apt-get install -y python3
-RUN apt-get install -y python3-pip
-RUN apt install -y python3.12-venv
-RUN git clone https://github.com/peanut-weanut/DivergentAssociationsDaily.git
+FROM python:3.9-slim
 
-WORKDIR /usr/local/app/DivergentAssociationsDaily/web-client
+WORKDIR /app
 
-COPY startup.sh startup.sh
+# Copy requirements first
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-CMD ["bash","./startup.sh"]
+# Copy the current directory contents into the container
+COPY . .
+
+# Make port 8080 available
+EXPOSE 8080
+
+# Run with gunicorn for better performance
+CMD ["gunicorn", "--bind", "0.0.0.0:8080", "--workers", "1", "--threads", "8", "--timeout", "0", "DAG_backend:app"]

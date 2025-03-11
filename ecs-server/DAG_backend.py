@@ -10,7 +10,9 @@ import os
 from flask_cors import CORS
 
 # GloVe model from https://nlp.stanford.edu/projects/glove/
-model = dat.Model("glove.6b.50d.txt", "words.txt")
+glove_path = "/app/data/glove.6b.300d.txt"
+words_path = "/app/data/words.txt"
+model = dat.Model(glove_path, words_path)
 
 # Needed functions, modularized so they can be ran on unit tests
 def resultScreen(data):
@@ -25,8 +27,9 @@ def resultScreen(data):
     return pairs
 
 def getTodaysWords(today_str):
+    csv_path = "/app/data/word-list.csv"
     todayswords = []
-    with open("Word Word Word List.csv", 'r', newline='') as file:
+    with open(csv_path, 'r', newline='') as file:
         datereader = reader(file)
         for line in datereader:
             if line[0] == today_str:

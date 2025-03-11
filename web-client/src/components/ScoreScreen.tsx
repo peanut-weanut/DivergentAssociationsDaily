@@ -42,7 +42,7 @@ const ScoreScreen: React.FC<ScoreScreenProps> = ({
   return (
     <div 
       ref={scoreRef}
-      className="w-full border-t-2 border-gray-300 pt-8 mt-8 h-screen flex flex-col items-center"
+      className="w-full border-t-2 border-black pt-8 mt-8 h-screen flex flex-col items-center"
     >
       <h2 className="text-3xl font-mono uppercase mb-6">Your Score</h2>
       
@@ -59,7 +59,7 @@ const ScoreScreen: React.FC<ScoreScreenProps> = ({
             cy="50" 
             r="45" 
             fill="none" 
-            stroke="#e5e7eb" 
+            stroke="#000000" 
             strokeWidth="8"
           />
           <circle 
