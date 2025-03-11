@@ -64,7 +64,7 @@ const SendRequestButton: React.FC<RequestProps> = ({
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-8 rounded-lg">
             <div className="text-xl mb-4">Calculating your score...</div>
-            <div className="w-12 h-12 border-4 border-gray-300 border-t-black rounded-full animate-spin mx-auto"></div>
+            <div className="w-12 h-12 border-4 border-black border-t-black rounded-full animate-spin mx-auto"></div>
           </div>
         </div>
       )}

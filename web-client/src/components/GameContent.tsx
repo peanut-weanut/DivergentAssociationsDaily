@@ -33,7 +33,7 @@ const GameContent = ({
       />
       
       {/* Divider */}
-      <hr className="w-full border-t border-gray-300 mb-4" />
+      <hr className="w-full border-t border-black mb-4" />
       
       {/* Input fields */}
       <div className="w-full space-y-3">
@@ -47,7 +47,7 @@ const GameContent = ({
       </div>
       
       {/* Divider */}
-      <hr className="w-full border-t border-gray-300 my-4" />
+      <hr className="w-full border-t border-black my-4" />
       
       {/* Submit button */}
       <SendRequestButton 
