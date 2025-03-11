@@ -11,7 +11,7 @@ import scipy.spatial.distance
 class Model:
     """Create model to compute DAT"""
 
-    def __init__(self, model="glove.840B.300d.txt", dictionary="words.txt", pattern="^[a-z][a-z-]*[a-z]$"):
+    def __init__(self, model="/app/data/glove.6b.300d.txt", dictionary="/app/data/words.txt", pattern="^[a-z][a-z-]*[a-z]$"):
         """Join model and words matching pattern in dictionary"""
 
         # Keep unique words matching pattern from file
