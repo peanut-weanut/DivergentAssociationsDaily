@@ -1,26 +1,27 @@
 import React from 'react';
 
-// This is a placeholder for the menu that will be implemented by another Claude instance
-const SideMenu: React.FC = () => {
+const GameInfo = () => {
   return (
-    <div className="h-full">
-      <div className="p-4">
-        <div className="text-center uppercase font-bold mb-4">Game Info</div>
-        <hr className="mb-4" />
-        
-        {/* These menu items are placeholders and will be implemented by another agent */}
-        <div className="space-y-4">
-          <div className="text-center py-2 uppercase">Game Info</div>
-          <hr />
-          <div className="text-center py-2 uppercase">Statistics</div>
-          <hr />
-          <div className="text-center py-2 uppercase">Leaderboard</div>
-          <hr />
-          <div className="text-center py-2 uppercase">History</div>
-        </div>
-      </div>
+    <div className="border border-gray-800 p-4 max-w-xs">
+      <h2 className="text-center text-xl font-medium mb-1">Game info</h2>
+      <hr className="border-t border-gray-800 mb-4" />
+      
+      <p className="mb-4">
+        Please enter 5 words that are as <strong>different</strong> from each other and 
+        from the theme words as possible, in all meanings and 
+        uses of the words.
+      </p>
+      
+      <p className="mb-2">The rules are</p>
+      <ol className="list-decimal pl-8 space-y-1">
+        <li>Only single words in English.</li>
+        <li>Only nouns (e.g., things, objects, concepts).</li>
+        <li>No proper nouns (e.g., no specific people or places).</li>
+        <li>No specialised vocabulary (e.g., no technical terms).</li>
+        <li>Think of the words on your own (e.g., do not just look at objects in your surroundings).</li>
+      </ol>
     </div>
   );
 };
 
-export default SideMenu;
+export default GameInfo;

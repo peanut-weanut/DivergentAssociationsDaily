@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:5000';
+const API_URL = 'https://divergent-associations-backend-1042962877547.us-west1.run.app';
 
 interface APIRequestConfig{
     method: 'GET' | 'POST';
@@ -22,7 +22,7 @@ async function apiRequest({ method = 'POST', data , type } : APIRequestConfig){
     console.log(fetchOptions)
     try{
         const response = await fetch(`${API_URL}`, fetchOptions);
-
+        console.log(`${API_URL}`);
         if (!response.ok){
             throw new Error(`API call failed: ${response.statusText}`);
         }

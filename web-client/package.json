@@ -6,10 +6,13 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "clean": "next rm --rf build"
   },
   "dependencies": {
     "cors": "^2.8.5",
+    "firebase": "^11.4.0",
+    "firebase-tools": "^13.33.0",
     "lucide-react": "^0.477.0",
     "next": "15.2.0",
     "react": "^19.0.0",
