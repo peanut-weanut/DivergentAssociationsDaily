@@ -4,6 +4,7 @@ from csv import reader
 from datetime import date
 import numpy as np #incase I figure out how to send shorts via json instead of the string im sending now
 import heapq #for the most unique pairs
+import PyDictionary
 
 #to run a debug version of this python backend, type
 #flask --app examples --debug run
