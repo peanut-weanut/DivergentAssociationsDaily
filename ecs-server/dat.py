@@ -73,6 +73,8 @@ class Model:
         uniques = []
         for word in words:
             valid = self.validate(word)
+            if not valid:
+                return None
             if valid and valid not in uniques:
                 uniques.append(valid)
 

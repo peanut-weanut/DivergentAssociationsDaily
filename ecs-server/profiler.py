@@ -5,12 +5,26 @@ import psutil
 import os
 import tracemalloc
 import time
+import random
+
+#get items needed for this
+wordlist = []
+with open("CSW.txt", "r") as file:
+    for word in file:
+        wordlist.append(word)
+
+def pickRandom(model, wordlist):
+    randwords = []
+    for x in range(7):
+        randwords.append(random.choice(wordlist))
+    for x in range(3,7):
+        model.dat(randwords[:x])
 
 def profile_main():
     # Start memory tracking
     tracemalloc.start()
     process = psutil.Process(os.getpid())
-    
+
     # Record initial memory
     initial_memory = process.memory_info().rss / 1024 / 1024
     initial_time = time.time()
@@ -22,11 +36,18 @@ def profile_main():
     # Your existing code
     import dat
     model = dat.Model("glove.840B.300d.txt", "words.txt")
-    for x in range(10000):
-        model.dat(["car", "prong", "horns", "galaxy", "keeper", "ball", "cheese", "garlic", "explosion", "scheme"])
-        model.dat(["car", "crap"])
-        model.dat(["cream", "soul", "scream", "bird"])
-    
+    '''
+    threads = []
+    for i in range(20):
+        thread = threading.Thread(target=pickRandom, args=(model, wordlist))
+        thread.start()
+        threads.append(thread)
+
+    for thread in threads:
+        thread.join()'
+    '''
+    for _ in range(10000):
+        pickRandom(model, wordlist)
     pr.disable()
     
     # Capture performance stats

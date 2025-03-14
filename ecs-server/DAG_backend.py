@@ -1,19 +1,24 @@
 import dat
-from flask import Flask, request, jsonify, make_response
+from flask import Flask, request, jsonify, make_response, abort
 from csv import reader
 from datetime import date
 import numpy as np #incase I figure out how to send shorts via json instead of the string im sending now
 import heapq #for the most unique pairs
-import PyDictionary
 import os
 
 # CORS configuration
 from flask_cors import CORS
 
 # GloVe model from https://nlp.stanford.edu/projects/glove/
-glove_path = "/app/data/glove.6b.300d.txt"
+glove_path = "/app/data/glove.42b.300d.txt"
 words_path = "/app/data/words.txt"
-model = dat.Model(glove_path, words_path)
+csv_path = "/app/data/word-list.csv"
+
+glove_file = glove_path if os.path.exists(glove_path) else "glove.42B.300d.txt"
+words_file = words_path if os.path.exists(words_path) else "words.txt"
+csv_file = csv_path if os.path.exists(csv_path) else "word-list.csv"
+
+model = dat.Model(glove_file, words_file)
 
 # Needed functions, modularized so they can be ran on unit tests
 def resultScreen(data):
@@ -28,9 +33,8 @@ def resultScreen(data):
     return pairs
 
 def getTodaysWords(today_str):
-    csv_path = "/app/data/word-list.csv"
     todayswords = []
-    with open(csv_path, 'r', newline='') as file:
+    with open(csv_file, 'r', newline='') as file:
         datereader = reader(file)
         for line in datereader:
             if line[0] == today_str:
@@ -40,8 +44,11 @@ def getTodaysWords(today_str):
     return todayswords
 
 app = Flask(__name__)
+
 app.config['TOGGLE_TITLE'] = True
+
 allowed_origins = ["http://localhost:3000", "https://divergent-associations.web.app", "https://its.fool.baby/golden-braid"]
+
 # Get port from environment variable or use 8080 as default
 port = int(os.environ.get('PORT', 8080))
 CORS(app, resources={
@@ -52,7 +59,6 @@ CORS(app, resources={
         "supports_credentials": False
     }
 })
-
 
 @app.route('/', methods=['OPTIONS'])
 def handle_options():
@@ -70,16 +76,14 @@ def handlePost():
         return handle_options()
     
     data = request.get_json()
-    print(data)
-    
     score = model.dat(data['data'])
-    print(int(float(str(score*100)[:5])))
-    
-    if data['type'] == 0:
+    if score == None:
+        abort(400, description = "NoneWord")
+    elif data['type'] == 0:
         response_data = {
             'score': int(float(str(score*100)[:5]))
         }
-    if data['type'] == 1:
+    elif data['type'] == 1:
         pairs = resultScreen(data.get('data'))
         response_data = {
             'score': int(float(str(score*100)[:5])),

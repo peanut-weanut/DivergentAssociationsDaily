@@ -4,6 +4,7 @@ CSW.txt
 
 glove.840B.300d.txt
 glove.840B.300d.zip
+glove.42B.300d.txt
 glove.6B.300d.txt
 glove.6B.200d.txt
 glove.6B.100d.txt
@@ -15,3 +16,5 @@ words.txt
 profile_results.txt
 backend/
 __pycache__
+.pytest_cache
+src

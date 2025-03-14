@@ -23,10 +23,10 @@ words.txt:
 .PHONY: run
 .PHONY: install
 
-makenouns:
+nouns:
 	python3 createNounsList.py
 
-makelist:
+list:
 	python3 createDatesForCsv.py
 
 devserver:
