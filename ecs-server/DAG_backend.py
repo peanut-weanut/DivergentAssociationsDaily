@@ -76,7 +76,7 @@ def handlePost():
         return handle_options()
     
     data = request.get_json()
-    score = model.dat(data['data'])
+    score = model.dat(data['data'], len(data['data']))
     if score == None:
         abort(400, description = "NoneWord")
     elif data['type'] == 0:
