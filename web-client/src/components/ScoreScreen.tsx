@@ -10,7 +10,7 @@ interface ScoreScreenProps {
 
 const ScoreScreen: React.FC<ScoreScreenProps> = ({ 
   score, 
-  maxScore = 150, 
+  maxScore = 100, 
   words, 
   userWords,
   autoScroll = true 
@@ -35,7 +35,8 @@ const ScoreScreen: React.FC<ScoreScreenProps> = ({
       });
     }
   }, [autoScroll]);
-  
+  // normalize score
+  score = (score - 50)/0.7
   // Calculate percentage for visual representation
   const scorePercentage = Math.min(100, Math.max(0, (score / maxScore) * 100));
   
