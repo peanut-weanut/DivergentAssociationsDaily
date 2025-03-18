@@ -59,7 +59,7 @@ const ScoreScreen: React.FC<ScoreScreenProps> = ({
             cy="50" 
             r="45" 
             fill="none" 
-            stroke="#000000" 
+            stroke="#333333" 
             strokeWidth="8"
           />
           <circle 
