@@ -50,7 +50,7 @@ const ScoreScreen: React.FC<ScoreScreenProps> = ({
       <div className="relative w-64 h-64 mb-8">
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="text-5xl font-bold">
-            {score}
+            {score.toString().substring(0,5)}
           </div>
         </div>
         <svg className="w-full h-full" viewBox="0 0 100 100">
