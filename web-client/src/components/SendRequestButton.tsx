@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { finalSubmit } from '@/lib/api-client';
 import ScoreScreen from './ScoreScreen';
+import Modal from '@/components/Modal';
 
 interface RequestProps {
   words: string[];
@@ -16,6 +17,8 @@ const SendRequestButton: React.FC<RequestProps> = ({
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [scoreData, setScoreData] = useState<number | null>(null);
   const [userWords, setUserWords] = useState<string[]>([]);
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string>('');
 
   const handleSubmit = async () => {
     // Extract user words (excluding original words)
@@ -27,7 +30,9 @@ const SendRequestButton: React.FC<RequestProps> = ({
     }
     // Early return if there are duplicates
     if(new Set(words).size !== words.length){
-      return; //TODO: change to like, an error message on the hud
+      setErrorMessage('Duplicate words detected. Please use unique words.');
+      setIsErrorModalOpen(true);
+      return;
     }
     setUserWords(userInputWords);
     setStatus('loading');
@@ -35,26 +40,66 @@ const SendRequestButton: React.FC<RequestProps> = ({
     try {
       const result = await finalSubmit.sendData(words);
       
-      // Parse the response - assuming it returns a score
-      // Adjust this based on your actual API response format
-      let parsedResult;
-      try {
-        parsedResult = JSON.parse(result);
-      } catch (e) {
-        // Fallback if not valid JSON
-        parsedResult = { score : parseInt(result)|| 0 };
-        console.assert(e);
+      // Check if there was an error
+      if (!result.success) {
+        setStatus('error');
+        
+        // Handle 400 error - likely a misspelled word
+        if (result.error?.code === 400) {
+          setErrorMessage('One or more words may be misspelled. Please check your spelling and try again.');
+          setIsErrorModalOpen(true);
+        } else {
+          // Handle other errors
+          setErrorMessage(result.error?.message || 'An unknown error occurred.');
+          setIsErrorModalOpen(true);
+        }
+        return;
       }
-      parsedResult.score *= 0.01;
-      setScoreData(parsedResult.score); 
-      console.log(`${scoreData}`);
-      setUserWords(parsedResult.data);
+      
+      // Process successful response
+      let scoreValue;
+      let wordsData;
+      
+      if (typeof result.data === 'string') {
+        // Try to parse as JSON if it's a string
+        try {
+          const parsed = JSON.parse(result.data);
+          scoreValue = parsed.score;
+          wordsData = parsed.data;
+        } catch (e) {
+          // If parsing fails, treat it as a raw score
+          scoreValue = parseInt(result.data) || 0;
+        }
+      } else if (typeof result.data === 'object') {
+        // It's already a parsed object
+        scoreValue = result.data.score;
+        wordsData = result.data.data;
+      }
+      
+      // Scale the score if needed
+      if (scoreValue) {
+        scoreValue *= 0.01;
+      }
+      
+      setScoreData(scoreValue); 
+      console.log(`Score: ${scoreValue}`);
+      
+      if (wordsData) {
+        setUserWords(wordsData);
+      }
       
       setStatus('success');
     } catch (error) {
       console.error(`ERROR: ${error}`);
       setStatus('error');
+      setErrorMessage('An unexpected error occurred. Please try again later.');
+      setIsErrorModalOpen(true);
     }
+  };
+
+  const closeErrorModal = () => {
+    setIsErrorModalOpen(false);
+    setStatus('idle');
   };
 
   return (
@@ -68,6 +113,23 @@ const SendRequestButton: React.FC<RequestProps> = ({
           </div>
         </div>
       )}
+      
+      {/* Error Modal */}
+      <Modal
+        isOpen={isErrorModalOpen}
+        onClose={closeErrorModal}
+      >
+        <h2 className="text-center text-xl font-medium mb-4">Error</h2>
+        <p className="mb-6">{errorMessage}</p>
+        <div className="flex justify-center">
+          <button
+            onClick={closeErrorModal}
+            className="border border-black py-2 px-6 text-lg font-mono uppercase hover:bg-black hover:text-white transition-colors duration-200"
+          >
+            OK
+          </button>
+        </div>
+      </Modal>
       
       {/* Submit button */}
       <div className={`w-full flex items-center "fixed bottom-2 left-0 px-4 max-w-sm mx-auto right-0"`}>
