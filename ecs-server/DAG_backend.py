@@ -5,6 +5,7 @@ from datetime import date
 import numpy as np #incase I figure out how to send shorts via json instead of the string im sending now
 import heapq #for the most unique pairs
 import os
+import threading
 
 # CORS configuration
 from flask_cors import CORS
@@ -18,12 +19,22 @@ glove_file = glove_path if os.path.exists(glove_path) else "glove.42B.300d.txt"
 words_file = words_path if os.path.exists(words_path) else "words.txt"
 csv_file = csv_path if os.path.exists(csv_path) else "word-list.csv"
 
-model = dat.Model(glove_file, words_file)
+model = None
+modelReady = threading.Event()
+
+def initializeModel():
+    global model
+    model = dat.Model(glove_file, words_file)
+    modelReady.set()
+
+initThread = threading.Thread(target=initializeModel)
+initThread.start()
 
 # Needed functions, modularized so they can be ran on unit tests
 def resultScreen(data):
     # Calculate 3 most unique pairs
     wordslist = {}
+    modelReady.wait()
     for x, y in ((x, y) for x in range(len(data) - 1) for y in range(x + 1, len(data))):
         score = model.dat([data[x], data[y]], 2)
         wordslist[score] = [data[x], data[y]]
@@ -76,6 +87,8 @@ def handlePost():
         return handle_options()
     
     data = request.get_json()
+    
+    modelReady.wait()
     score = model.dat(data['data'], len(data['data']))
     if score == None:
         abort(400, description = "NoneWord")
