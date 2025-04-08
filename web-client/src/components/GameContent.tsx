@@ -28,7 +28,8 @@ const GameContent = ({
     <div className={`flex flex-col items-center ${isMobile ? "pb-16" : ""}`}>
       {/* Words of the day */}
       <WordsDisplay 
-        words={todaysWords} 
+        words={todaysWords.slice(0,3)}
+        definitions={todaysWords.slice(3,6)} 
         isLoading={isLoading}
       />
       
@@ -51,8 +52,8 @@ const GameContent = ({
       
       {/* Submit button */}
       <SendRequestButton 
-        words={[...todaysWords, ...userInputs.filter(word => word.trim() !== '')]} 
-        originalWords={todaysWords}
+        words={[...todaysWords.slice(0,3), ...userInputs.filter(word => word.trim() !== '')]} 
+        originalWords={todaysWords.slice(0,3)}
         isMobile={isMobile} 
       />
     </div>
