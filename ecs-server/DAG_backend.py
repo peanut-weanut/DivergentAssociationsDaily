@@ -54,6 +54,10 @@ def getTodaysWords(today_str):
                 todayswords.append(line[1])
                 todayswords.append(line[2])
                 todayswords.append(line[3])
+                todayswords.append(line[4])
+                todayswords.append(line[5])
+                todayswords.append(line[6])
+                
     return todayswords
 
 app = Flask(__name__)
