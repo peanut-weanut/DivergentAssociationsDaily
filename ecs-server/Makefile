@@ -9,6 +9,10 @@ glove.840B.300d.txt:
 	wget https://nlp.stanford.edu/data/glove.840B.300d.zip && \
 		unzip glove.840B.300d.zip
 
+glove.42B.300d.txt:
+	wget https://nlp.stanford.edu/data/glove.42B.300d.zip && \
+		unzip glove.42B.300d.zip
+
 glove.6B.txt:
 	wget https://nlp.stanford.edu/data/glove.6B.zip && \
 		unzip glove.6B.zip
