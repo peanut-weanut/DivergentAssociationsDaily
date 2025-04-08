@@ -17,7 +17,7 @@ csv_path = "/app/data/word-list.csv"
 
 glove_file = glove_path if os.path.exists(glove_path) else "glove.42B.300d.txt"
 words_file = words_path if os.path.exists(words_path) else "words.txt"
-csv_file = csv_path if os.path.exists(csv_path) else "word-list.csv"
+csv_file = csv_path if os.path.exists(csv_path) else "word-list-definitions.csv"
 
 model = None
 modelReady = threading.Event()
@@ -36,6 +36,8 @@ def resultScreen(data):
     wordslist = {}
     modelReady.wait()
     for x, y in ((x, y) for x in range(len(data) - 1) for y in range(x + 1, len(data))):
+        if y < 3:
+            continue
         score = model.dat([data[x], data[y]], 2)
         wordslist[score] = [data[x], data[y]]
     
@@ -52,6 +54,10 @@ def getTodaysWords(today_str):
                 todayswords.append(line[1])
                 todayswords.append(line[2])
                 todayswords.append(line[3])
+                todayswords.append(line[4])
+                todayswords.append(line[5])
+                todayswords.append(line[6])
+                
     return todayswords
 
 app = Flask(__name__)
