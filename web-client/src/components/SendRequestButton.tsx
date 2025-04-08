@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { finalSubmit } from '@/lib/api-client';
 import ScoreScreen from './ScoreScreen';
+//import GameStorage from './localStorage'
 
 interface RequestProps {
   words: string[];
@@ -29,7 +30,27 @@ const SendRequestButton: React.FC<RequestProps> = ({
     if(new Set(words).size !== words.length){
       return; //TODO: change to like, an error message on the hud
     }
+    // early return if word has been used before
+    /*
+    words.forEach((word: string) =>{
+      GameStorage.isWordUsed(word)
+    })
+    */
+
+    //TODO: correct this
+    //early return if newest word has been used before
+    //GameStorage.isWordUsed(words[words.length - 1])
+    
+    
     setUserWords(userInputWords);
+    
+    
+    //add user words to storage
+    //GameStorage.saveUsedWords(words)
+    
+    
+    console.log('Saved Words:', localStorage.getItem('usedWords'));
+
     setStatus('loading');
     
     try {
@@ -46,6 +67,12 @@ const SendRequestButton: React.FC<RequestProps> = ({
         console.assert(e);
       }
       parsedResult.score *= 0.01;
+      
+      
+      //save score
+      //GameStorage.saveScore(parsedResult.score)
+      
+      
       setScoreData(parsedResult.score); 
       console.log(`${scoreData}`);
       setUserWords(parsedResult.data);

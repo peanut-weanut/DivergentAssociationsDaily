@@ -1,4 +1,5 @@
 const API_URL = 'https://divergent-associations-backend-1042962877547.us-west1.run.app';
+//const API_URL = 'http://127.0.0.1:5000'
 
 interface APIRequestConfig{
     method: 'GET' | 'POST';
