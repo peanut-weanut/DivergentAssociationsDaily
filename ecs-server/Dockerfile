@@ -13,4 +13,4 @@ COPY . .
 EXPOSE 8080
 
 # Run with gunicorn for better performance
-CMD ["gunicorn", "--bind", "0.0.0.0:8080", "--workers", "1", "--threads", "8", "--timeout", "0", "DAG_backend:app"]
+CMD ["gunicorn", "--bind", "0.0.0.0:8080", "--workers", "1", "--threads", "2", "--timeout", "0", "DAG_backend:app"]

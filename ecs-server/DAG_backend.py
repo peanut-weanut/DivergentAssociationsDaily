@@ -11,30 +11,40 @@ import threading
 from flask_cors import CORS
 
 # GloVe model from https://nlp.stanford.edu/projects/glove/
-glove_path = "/app/data/glove.42b.300d.txt"
-words_path = "/app/data/words.txt"
-csv_path = "/app/data/word-list.csv"
+glove = "glove.42B.300d.txt"
+words = "words.txt"
+csvals = "word-list-definitions.csv"
 
-glove_file = glove_path if os.path.exists(glove_path) else "glove.42B.300d.txt"
-words_file = words_path if os.path.exists(words_path) else "words.txt"
-csv_file = csv_path if os.path.exists(csv_path) else "word-list-definitions.csv"
+glove_path = f"/app/data/{glove}"
+words_path = f"/app/data/{words}"
+csv_path = f"/app/data/{csvals}"
 
-model = None
-modelReady = threading.Event()
+glove_file = glove_path if os.path.exists(glove_path) else glove
+words_file = words_path if os.path.exists(words_path) else words
+csv_file = csv_path if os.path.exists(csv_path) else csvals
 
-def initializeModel():
-    global model
+#make true to enable multithreading for the setup of the model
+multithreaded = False
+if multithreaded:
+    model = None
+    modelReady = threading.Event()
+
+    def initializeModel():
+        global model
+        model = dat.Model(glove_file, words_file)
+        modelReady.set()
+
+    initThread = threading.Thread(target=initializeModel)
+    initThread.start()
+else:
     model = dat.Model(glove_file, words_file)
-    modelReady.set()
-
-initThread = threading.Thread(target=initializeModel)
-initThread.start()
 
 # Needed functions, modularized so they can be ran on unit tests
 def resultScreen(data):
     # Calculate 3 most unique pairs
     wordslist = {}
-    modelReady.wait()
+    if multithreaded:
+        modelReady.wait()
     for x, y in ((x, y) for x in range(len(data) - 1) for y in range(x + 1, len(data))):
         if y < 3:
             continue
@@ -94,7 +104,8 @@ def handlePost():
     
     data = request.get_json()
     
-    modelReady.wait()
+    if multithreaded:
+        modelReady.wait()
     score = model.dat(data['data'], len(data['data']))
     if score == None:
         abort(400, description = "NoneWord")
