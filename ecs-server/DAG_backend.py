@@ -106,6 +106,7 @@ def handlePost():
     
     if multithreaded:
         modelReady.wait()
+    
     score = model.dat(data['data'], len(data['data']))
     if score == None:
         abort(400, description = "NoneWord")
